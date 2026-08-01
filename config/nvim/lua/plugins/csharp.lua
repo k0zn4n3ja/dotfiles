@@ -6,6 +6,10 @@
 return {
   {
     "seblyng/roslyn.nvim",
+    -- Pinned: main now requires Neovim >= 0.12 (commit dbd677f, "feat!: >=0.12").
+    -- We're on 0.11.7 (Nix stable 25.11), so pin to the last 0.11-compatible commit.
+    -- Remove this pin once nixpkgs ships Neovim 0.12+.
+    commit = "f2ec6ee6384c3b611ddc817b9e78b20cd0334bbb",
     ft = { "cs", "razor" },
     config = function()
       -- point roslyn at the Nix-installed server on PATH

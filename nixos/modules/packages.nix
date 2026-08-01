@@ -54,6 +54,8 @@
     wtype           # cliphist paste helper
     swappy          # screenshot annotate/edit
     grimblast       # convenient screenshot wrapper
+    wf-recorder     # region/screen video recording (Super+Shift+R toggle)
+    pulseaudio      # client tools only (pactl) so wf-recorder can grab desktop audio; no daemon (PipeWire stays)
     nautilus        # file manager (already via GNOME, pinned here too)
     networkmanagerapplet
     btop            # terminal system monitor (CLI)

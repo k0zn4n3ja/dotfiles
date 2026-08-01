@@ -26,7 +26,7 @@
   "nvim-ts-autotag": { "branch": "main", "commit": "88c1453db4ba7dd24131086fe51fdf74e587d275" },
   "persistence.nvim": { "branch": "main", "commit": "b20b2a7887bd39c1a356980b45e03250f3dce49c" },
   "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
-  "roslyn.nvim": { "branch": "main", "commit": "7d8c166a0c70473ffa558d4d2430769d581fa8dd" },
+  "roslyn.nvim": { "branch": "main", "commit": "f2ec6ee6384c3b611ddc817b9e78b20cd0334bbb" },
   "rustaceanvim": { "branch": "main", "commit": "6409acbb0a6f17f228a7524698431300b96082e2" },
   "snacks.nvim": { "branch": "main", "commit": "882c996cf28183f4d63640de0b4c02ec886d01f2" },
   "todo-comments.nvim": { "branch": "main", "commit": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668" },

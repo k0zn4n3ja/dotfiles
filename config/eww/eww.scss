@@ -64,7 +64,10 @@
 .cover { border-radius: 12px; }
 .cover-glyph { font-size: 52px; color: #6c7086; }
 
-.p-title  { font-size: 14px; font-weight: 700; color: #cdd6f4; margin-top: 4px; }
+/* fixed width so the scrolling marquee never resizes the card as glyphs
+   (emoji etc.) of varying pixel-width slide past. Keep WIDTH in marquee.sh
+   comfortably under this. */
+.p-title  { font-size: 14px; font-weight: 700; color: #cdd6f4; margin-top: 4px; min-width: 165px; }
 .p-artist { font-size: 12px; color: #a6adc8; }
 .p-album  { font-size: 11px; color: #6c7086; }
 

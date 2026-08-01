@@ -29,6 +29,7 @@
 ;; ═══ music popup (click the now-playing module in waybar) ══════════
 (defpoll player :interval "1s" `~/.config/eww/scripts/music.sh`)
 (deflisten cava_bars :initial "" `~/.config/eww/scripts/cava.sh`)
+(deflisten title_scroll :initial "" `~/.config/eww/scripts/marquee.sh`)
 
 (defwidget music []
   (box :class "player" :orientation "v" :space-evenly false :spacing 14
@@ -36,7 +37,7 @@
       (image :class "cover" :path {player.cover} :image-width 150 :image-height 150)
       (label :class "cover-glyph" :visible {player.art == ""} :text ""))
     (box :orientation "v" :space-evenly false :spacing 1
-      (label :class "p-title"  :halign "center" :limit-width 26 :text {player.title})
+      (label :class "p-title"  :halign "center" :text title_scroll)
       (label :class "p-artist" :halign "center" :limit-width 30 :visible {player.artist != ""} :text {player.artist})
       (label :class "p-album"  :halign "center" :limit-width 30 :visible {player.album != ""}  :text {player.album}))
     (box :class "seek" :orientation "v" :space-evenly false :spacing 3 :visible {player.hasbar}
