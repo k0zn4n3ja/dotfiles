@@ -1,0 +1,16 @@
+# Safety net — the repo only tracks an allowlist of config dirs, but block
+# anything secret-looking that might sneak into one of them.
+**/secrets*
+**/*secret*
+**/*.key
+**/*.pem
+**/*.p12
+**/id_rsa*
+**/id_ed25519*
+**/*token*
+**/*.log
+
+# editor / runtime junk
+**/.DS_Store
+**/*.swp
+.omc/

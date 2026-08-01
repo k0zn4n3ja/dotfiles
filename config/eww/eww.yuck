@@ -1,0 +1,65 @@
+;; ── data sources ────────────────────────────────────────────────
+(defpoll cputemp    :interval "3s" :initial "50" `~/.config/eww/scripts/temp.sh`)
+(defpoll cpufreq    :interval "3s"   `~/.config/eww/scripts/cpufreq.sh`)
+
+;; TEMP bar ceiling (deg C). Tjmax/throttle for the 125H is 110 -> turns red there.
+(defvar temp_max 150)
+
+;; ── one vertical bar column: bar | value | label ───────────────
+(defwidget vbar [label value unit cls]
+  (box :class "vmetric" :orientation "v" :space-evenly false :spacing 7 :halign "center" :hexpand true
+    (box :class "vbar-track" :halign "center" :valign "end"
+      (progress :class "vbar ${cls}" :value value :orientation "v" :flipped true))
+    (label :class "vbar-val ${cls}" :halign "center" :text unit)
+    (label :class "vbar-label ${cls}" :halign "center" :text label)))
+
+;; ── the card ────────────────────────────────────────────────────
+(defwidget stats []
+  (box :class "card" :orientation "v" :space-evenly false :spacing 12
+    (box :class "bars" :orientation "h" :space-evenly false :halign "center" :spacing 16
+      (vbar :label "CPU"  :value {EWW_CPU.avg}                 :unit cpufreq :cls "cpu")
+      (vbar :label "RAM"  :value {EWW_RAM.used_mem_perc}       :unit "${round(EWW_RAM.used_mem / 1073741824.0, 1)}G" :cls "ram")
+      (vbar :label "DISK" :value {EWW_DISK["/home"].used_perc} :unit "${round(EWW_DISK["/home"].used / 1073741824.0, 0)}G" :cls "disk")
+      (vbar :label "TEMP" :value {cputemp * 100.0 / temp_max}
+            :unit "${cputemp}°C"
+            :cls "temp ${cputemp >= 110 ? 'hot' : 'cool'}"))))
+
+;; ── window: bottom layer (above wallpaper, under windows) ──────
+(defwindow desktop-stats
+  :monitor 0
+  :stacking "bottom"
+  :exclusive false
+  :focusable false
+  :geometry (geometry :x "20px" :y "24px" :anchor "top left" :width "215px" :height "150px")
+  (stats))
+
+;; ═══ music popup (click the now-playing module in waybar) ══════════
+(defpoll player :interval "1s" `~/.config/eww/scripts/music.sh`)
+(deflisten cava_bars :initial "" `~/.config/eww/scripts/cava.sh`)
+
+(defwidget music []
+  (box :class "player" :orientation "v" :space-evenly false :spacing 14
+    (overlay
+      (image :class "cover" :path {player.cover} :image-width 150 :image-height 150)
+      (label :class "cover-glyph" :visible {player.art == ""} :text ""))
+    (box :orientation "v" :space-evenly false :spacing 1
+      (label :class "p-title"  :halign "center" :limit-width 26 :text {player.title})
+      (label :class "p-artist" :halign "center" :limit-width 30 :visible {player.artist != ""} :text {player.artist})
+      (label :class "p-album"  :halign "center" :limit-width 30 :visible {player.album != ""}  :text {player.album}))
+    (box :class "seek" :orientation "v" :space-evenly false :spacing 3 :visible {player.hasbar}
+      (progress :class "p-bar" :orientation "h" :value {player.pct})
+      (box :orientation "h" :space-evenly false
+        (label :class "p-time" :text {player.pos})
+        (label :class "p-time" :hexpand true :halign "end" :text {player.len})))
+    (box :class "controls" :orientation "h" :space-evenly true :halign "center"
+      (button :class "ctl"          :onclick "playerctl previous"   (label :text {player.prev}))
+      (button :class "ctl ctl-main" :onclick "playerctl play-pause" (label :text {player.icon}))
+      (button :class "ctl"          :onclick "playerctl next"       (label :text {player.next})))
+    (label :class "cava" :halign "center" :visible {cava_bars != ""} :text cava_bars)))
+
+(defwindow music
+  :monitor 0
+  :stacking "bottom"
+  :focusable false
+  :geometry (geometry :x "249px" :y "24px" :anchor "top left" :width "230px" :height "300px")
+  (music))

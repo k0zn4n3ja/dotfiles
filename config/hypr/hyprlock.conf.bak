@@ -1,0 +1,53 @@
+background {
+    monitor =
+    path = ~/Pictures/gatsu.jpeg
+    blur_passes = 3
+    blur_size = 6
+    brightness = 0.6
+}
+
+general {
+    hide_cursor = true
+    grace = 2
+}
+
+input-field {
+    monitor =
+    size = 300, 55
+    position = 0, -80
+    halign = center
+    valign = center
+    outline_thickness = 2
+    dots_size = 0.28
+    dots_spacing = 0.3
+    outer_color = rgba(33ccffee)
+    inner_color = rgba(1a1a1ad0)
+    font_color = rgba(e0e0e0ff)
+    placeholder_text = <i>Password…</i>
+    fade_on_empty = false
+    rounding = 12
+}
+
+# Clock
+label {
+    monitor =
+    text = cmd[update:1000] echo "$(date +'%H:%M')"
+    font_size = 96
+    font_family = JetBrainsMono Nerd Font
+    color = rgba(e0e0e0ff)
+    position = 0, 160
+    halign = center
+    valign = center
+}
+
+# Date
+label {
+    monitor =
+    text = cmd[update:60000] echo "$(date +'%A, %d %B')"
+    font_size = 22
+    font_family = JetBrainsMono Nerd Font
+    color = rgba(b0b0b0ff)
+    position = 0, 80
+    halign = center
+    valign = center
+}
