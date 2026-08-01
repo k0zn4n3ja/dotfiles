@@ -24,14 +24,7 @@
             :unit "${cputemp}°C"
             :cls "temp ${cputemp >= 110 ? 'hot' : 'cool'}"))))
 
-;; ── window: bottom layer (above wallpaper, under windows) ──────
-(defwindow desktop-stats
-  :monitor 0
-  :stacking "bottom"
-  :exclusive false
-  :focusable false
-  :geometry (geometry :x "20px" :y "24px" :anchor "top left" :width "215px" :height "150px")
-  (stats))
+;; (the system monitor + music player are combined into the `dashboard` window below)
 
 ;; ═══ music popup (click the now-playing module in waybar) ══════════
 (defpoll player :interval "1s" `~/.config/eww/scripts/music.sh`)
@@ -51,15 +44,22 @@
       (box :orientation "h" :space-evenly false
         (label :class "p-time" :text {player.pos})
         (label :class "p-time" :hexpand true :halign "end" :text {player.len})))
-    (box :class "controls" :orientation "h" :space-evenly true :halign "center"
+    (box :class "controls" :orientation "h" :space-evenly false :halign "center" :spacing 6
       (button :class "ctl"          :onclick "playerctl previous"   (label :text {player.prev}))
       (button :class "ctl ctl-main" :onclick "playerctl play-pause" (label :text {player.icon}))
       (button :class "ctl"          :onclick "playerctl next"       (label :text {player.next})))
     (label :class "cava" :halign "center" :visible {cava_bars != ""} :text cava_bars)))
 
-(defwindow music
+;; -- dashboard: music player on top (collapses when nothing plays) + system monitor below --
+(defwidget dashboard []
+  (box :orientation "v" :space-evenly false :spacing 12 :halign "start"
+    (box :visible {player.status != "none"} :hexpand true (music))
+    (box :hexpand true (stats))))
+
+(defwindow dashboard
   :monitor 0
   :stacking "bottom"
+  :exclusive false
   :focusable false
-  :geometry (geometry :x "249px" :y "24px" :anchor "top left" :width "230px" :height "300px")
-  (music))
+  :geometry (geometry :x "20px" :y "24px" :anchor "top left" :width "215px" :height "10px")
+  (dashboard))

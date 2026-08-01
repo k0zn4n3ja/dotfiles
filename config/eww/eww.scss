@@ -85,11 +85,11 @@
 .ctl {
   font-size: 16px;
   color: #cdd6f4;
-  background-color: rgba(69, 71, 90, 0.45);
+  background-color: rgba(17, 17, 27, 0.75);   /* darker so the light glyph pops */
   padding: 8px 15px;
   border-radius: 10px;
 }
-.ctl:hover { background-color: rgba(137, 180, 250, 0.28); }
+.ctl:hover { background-color: rgba(137, 180, 250, 0.30); }
 .ctl-main {
   font-size: 18px;
   color: #1e1e2e;

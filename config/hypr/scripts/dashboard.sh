@@ -1,30 +1,15 @@
 #!/usr/bin/env bash
-# Toggle the desktop dashboard: system-monitor (top-left) + music player
-# (to its right, only shown when something is playing). Bound to Super+M.
-
-playing() {
-    local s; s=$(playerctl status 2>/dev/null)
-    [ "$s" = "Playing" ] || [ "$s" = "Paused" ]
-}
-
-open_all() {
-    eww open desktop-stats
-    if playing; then eww open music; else eww close music 2>/dev/null; fi
-}
-
-close_all() {
-    eww close desktop-stats 2>/dev/null
-    eww close music 2>/dev/null
-}
+# Toggle the desktop dashboard (one eww window: music player on top, which
+# collapses when nothing is playing, + system monitor below). Bound to Super+M.
 
 case "$1" in
-    open)  open_all ;;
-    close) close_all ;;
+    open)  eww open  dashboard ;;
+    close) eww close dashboard ;;
     toggle|*)
-        if eww active-windows 2>/dev/null | grep -q 'desktop-stats'; then
-            close_all
+        if eww active-windows 2>/dev/null | grep -q 'dashboard'; then
+            eww close dashboard
         else
-            open_all
+            eww open dashboard
         fi
         ;;
 esac

@@ -57,7 +57,8 @@
     nautilus        # file manager (already via GNOME, pinned here too)
     networkmanagerapplet
     btop            # terminal system monitor (CLI)
-    eww             # desktop widgets (bottom-layer stats card)
+    eww             # desktop widgets (stats card + music player)
+    cava            # audio visualizer (streamed into the eww music player)
 
     # --- theming: dark GTK + nicer icons ---
     papirus-icon-theme  # folder/file icon set (has Papirus-Dark)
