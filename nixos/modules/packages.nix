@@ -56,6 +56,7 @@
     grimblast       # convenient screenshot wrapper
     wf-recorder     # region/screen video recording (Super+Shift+R toggle)
     pulseaudio      # client tools only (pactl) so wf-recorder can grab desktop audio; no daemon (PipeWire stays)
+    ffmpeg          # grabs a frame of the live wallpaper for the hyprlock background
     nautilus        # file manager (already via GNOME, pinned here too)
     networkmanagerapplet
     btop            # terminal system monitor (CLI)
