@@ -65,6 +65,20 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Escape hatch for packages not yet in the stable channel: refer to them as
+  # `unstable.<name>` anywhere pkgs is in scope.
+  # Requires the channel (as root):
+  #   nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable
+  #   nix-channel --update
+  nixpkgs.overlays = [
+    (final: prev: {
+      unstable = import <unstable> {
+        inherit (prev.stdenv.hostPlatform) system;
+        config.allowUnfree = true;
+      };
+    })
+  ];
+
   # Keep this as your install version
   system.stateVersion = "25.11";
 }

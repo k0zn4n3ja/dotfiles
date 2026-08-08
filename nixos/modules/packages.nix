@@ -77,6 +77,7 @@
     # VPN / Communication
     #
     protonvpn-gui
+    unstable.proton-vpn-cli # not in 25.11 yet
     thunderbird
     protonmail-bridge
     signal-desktop
