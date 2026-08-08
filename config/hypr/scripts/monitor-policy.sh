@@ -1,49 +1,51 @@
 #!/usr/bin/env bash
-# "Clamshell" monitor policy:
-#   external monitor (DP-1) plugged in  -> black out the laptop panel, use only the external
-#   external monitor unplugged          -> bring the laptop panel back
+# "Show only on the second display" clamshell policy (like Windows/macOS):
+#   ANY real external monitor connected -> DISABLE the laptop panel entirely
+#                                          (removed from the layout; Hyprland
+#                                          moves its workspaces to the external,
+#                                          nothing can land on a dead screen)
+#   all externals unplugged             -> re-enable the laptop panel
 #
-# Uses DPMS off/on (NOT `monitor,disable`) so the laptop screen is only powered
-# down, never removed from Hyprland -- it ALWAYS recovers and can never get
-# stuck black (that's the failure mode of the disable-based toggles online).
-# Polls every 2s, so even if it misses a hotplug event it self-corrects.
+# We DISABLE (not DPMS-off): DPMS only powers the glass down while the output
+# stays in the layout, so windows/cursor still stray onto a black screen. Disable
+# actually takes it out of the desktop, which is what "only on 2" means.
+#
+# Stranding safety (disable's one risk = getting stuck with no usable screen):
+#   * polls every 2s and re-enables the laptop the moment no external is seen
+#   * re-enables the laptop on ANY clean exit (trap)
+#   * ignores Hyprland's HEADLESS fallback output, so an unplug can never be
+#     mistaken for "an external is still there" (which would keep us disabled)
 
 INTERNAL="eDP-1"
-EXTERNAL="DP-1"
 
 # single instance only
 exec 9>/tmp/hypr-monitor-policy.lock
 flock -n 9 || exit 0
 
-# make sure the laptop panel is on if we ever exit.
-# NOTE: trap INT/TERM must EXIT after cleanup -- a bare `trap cleanup TERM`
-# runs the handler and then resumes the loop, making the daemon un-killable
-# except via SIGKILL.
-cleanup() { hyprctl dispatch dpms on "$INTERNAL" >/dev/null 2>&1; }
+# always leave the laptop panel usable if we exit. trap must EXIT after cleanup,
+# else a bare TERM handler resumes the loop and the daemon is unkillable but -9.
+cleanup() { hyprctl keyword monitor "${INTERNAL}, preferred, auto, auto" >/dev/null 2>&1; }
 trap cleanup EXIT
 trap 'cleanup; exit 0' INT TERM
 
 state=""
 while :; do
-    # Don't fight the lock screen. hyprlock needs every output awake (a DPMS-off
-    # monitor makes it black-screen), so while it's up we leave DPMS alone and
-    # reset state so the clamshell rule is re-applied the moment you unlock.
-    if pidof hyprlock >/dev/null 2>&1; then
-        state=""
-        sleep 2
-        continue
-    fi
+    # first connected monitor that is neither the laptop nor a headless fallback
+    ext=$(hyprctl monitors all -j 2>/dev/null | jq -r --arg i "$INTERNAL" '
+        [ .[] | select(.name != $i and (.name | startswith("HEADLESS") | not)) ][0].name // empty')
 
-    if hyprctl monitors all -j | jq -e --arg m "$EXTERNAL" 'any(.[]; .name==$m)' >/dev/null 2>&1; then
-        want="off"      # external present -> laptop off
+    if [ -n "$ext" ]; then
+        want="off"      # external present -> laptop disabled
     else
-        want="on"       # external gone    -> laptop on
+        want="on"       # no external      -> laptop enabled
     fi
 
     if [ "$want" != "$state" ]; then
-        hyprctl dispatch dpms "$want" "$INTERNAL" >/dev/null 2>&1
-        # when going external-only, move focus off the (now dark) laptop panel
-        [ "$want" = "off" ] && hyprctl dispatch focusmonitor "$EXTERNAL" >/dev/null 2>&1
+        if [ "$want" = "off" ]; then
+            hyprctl keyword monitor "${INTERNAL}, disable" >/dev/null 2>&1
+        else
+            hyprctl keyword monitor "${INTERNAL}, preferred, auto, auto" >/dev/null 2>&1
+        fi
         state="$want"
     fi
     sleep 2
