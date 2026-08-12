@@ -30,6 +30,20 @@
   # Screen locker (sets up the PAM entry so hyprlock can actually unlock)
   programs.hyprlock.enable = true;
 
+  # GPU: enable Intel hardware video acceleration (VA-API).
+  # Without this, mpv/mpvpaper's hwdec has nothing to hand off to and falls
+  # back to SOFTWARE decode, pegging a single CPU core (hot chassis, low
+  # overall CPU graph). intel-media-driver is the modern "iHD" driver that
+  # covers Meteor Lake / Arc (this machine's iGPU, PCI 8086:7d55).
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # iHD VA-API driver (Gen8+ / Meteor Lake)
+    ];
+  };
+  # Force the iHD driver so hwdec=auto resolves to it cleanly.
+  environment.sessionVariables.LIBVA_DRIVER_NAME = "iHD";
+
   # Icon/glyph fonts for waybar and the terminal
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono

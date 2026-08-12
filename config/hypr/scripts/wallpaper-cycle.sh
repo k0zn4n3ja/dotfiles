@@ -34,7 +34,7 @@ set_wall() {
         *.gif)
             opts="$common loop-file=inf" ;;                # animated gif: loop
         *)
-            opts="$common loop-file=inf hwdec=auto" ;;     # video: loop + hw decode
+            opts="$common loop-file=inf hwdec=vaapi" ;;    # video: loop + GPU (VA-API) decode
     esac
 
     pkill mpvpaper 2>/dev/null
