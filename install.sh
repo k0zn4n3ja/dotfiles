@@ -33,6 +33,6 @@ To restore the NixOS system config on this machine:
   sudo nixos-generate-config --show-hardware-config > "$REPO/nixos/hardware-configuration.nix"
   # 2. point /etc/nixos at the repo:
   sudo mv /etc/nixos /etc/nixos.orig && sudo ln -s "$REPO/nixos" /etc/nixos
-  # 3. build it:
-  sudo nixos-rebuild switch
+  # 3. build it (flake-based; inputs pinned in nixos/flake.lock):
+  sudo nixos-rebuild switch --flake "$REPO/nixos#nixos"
 EOF

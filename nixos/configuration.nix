@@ -5,7 +5,7 @@
 # and imports topic modules from ./modules/. Each module is the same
 # { config, pkgs, ... }: { ... } shape; NixOS merges them all together.
 
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs-unstable, ... }:
 
 {
   imports = [
@@ -65,14 +65,15 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Flakes replace channels for this machine.
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Escape hatch for packages not yet in the stable channel: refer to them as
-  # `unstable.<name>` anywhere pkgs is in scope.
-  # Requires the channel (as root):
-  #   nix-channel --add https://nixos.org/channels/nixpkgs-unstable unstable
-  #   nix-channel --update
+  # `unstable.<name>` anywhere pkgs is in scope. The nixpkgs-unstable input is
+  # passed in from flake.nix and pinned in flake.lock.
   nixpkgs.overlays = [
     (final: prev: {
-      unstable = import <unstable> {
+      unstable = import nixpkgs-unstable {
         inherit (prev.stdenv.hostPlatform) system;
         config.allowUnfree = true;
       };

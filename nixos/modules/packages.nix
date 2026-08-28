@@ -73,6 +73,7 @@
     #
     librewolf
     brave
+    vivaldi
 
     #
     # VPN / Communication
