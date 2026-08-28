@@ -176,8 +176,9 @@
     rust-analyzer
 
     #
-    # Azure
+    # Cloud CLIs
     #
+    awscli2
     (azure-cli.withExtensions [
       azure-cli.extensions.aks-preview
     ])
