@@ -6,6 +6,7 @@
 {
   imports = [
     ./zen-browser.nix
+    ./pup.nix
   ];
 
   # librewolf currently ships a version flagged insecure; allow it explicitly.
