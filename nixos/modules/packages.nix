@@ -1,12 +1,14 @@
 # All bare packages installed system-wide (environment.systemPackages).
 # Programs that have dedicated NixOS modules live in programs.nix / desktop.nix
-# instead. The Zen browser derivation is imported from ./zen-browser.nix.
+# instead. Custom derivations (zen, pup, proton-drive-cli) are imported below.
 { config, pkgs, ... }:
 
 {
   imports = [
     ./zen-browser.nix
+    ./cursor.nix
     ./pup.nix
+    ./proton-drive-cli.nix
   ];
 
   # librewolf currently ships a version flagged insecure; allow it explicitly.
@@ -16,8 +18,17 @@
     "librewolf-unwrapped-152.0.2-1"
   ];
 
+  # Switch JDKs with: export JAVA_HOME=$JAVA_HOME_17  (or _11 / _25)
+  environment.sessionVariables = {
+    JAVA_HOME_11 = "${pkgs.temurin-bin-11}";
+    JAVA_HOME_17 = "${pkgs.temurin-bin-17}";
+    JAVA_HOME_25 = "${pkgs.temurin-bin-25}";
+    JAVA_HOME = "${pkgs.temurin-bin-25}";
+  };
+
   environment.systemPackages = with pkgs; [
     vim
+    bubblewrap       # Codex Linux sandbox helper (`bwrap`)
 
     #
     # Gnome stuff
@@ -39,7 +50,6 @@
     hyprpaper
     waybar
     rofi
-    swww
     wl-clipboard
     grim
     slurp
@@ -74,7 +84,6 @@
     #
     librewolf
     brave
-    vivaldi
 
     #
     # VPN / Communication
@@ -83,8 +92,9 @@
     unstable.proton-vpn-cli # not in 25.11 yet
     thunderbird
     protonmail-bridge
-    signal-desktop
+    unstable.signal-desktop # stable lags and Signal refuses to run old clients
     telegram-desktop
+    discord
     slack
     zoom-us
 
@@ -127,10 +137,18 @@
     vscodium
     git
     gh
+    gnumake
     jq
+    python3
+    gitleaks
     nodejs_22
     ollama
     opencode
+    unstable.grok-build # xAI Grok CLI; not in 25.11
+    # EatClub JVM/TF: 25 is default `java`. 11/17 via JAVA_HOME_11 / JAVA_HOME_17.
+    temurin-bin-25
+    maven
+    terraform
 
     # --- LazyVim: LSP servers + toolchains via Nix (no Mason needed) ---
     gcc                         # C compiler for treesitter parser builds
@@ -160,10 +178,8 @@
     #
     # Terminal
     #
-    alacritty
     tmux
     iamb
-    kitty
     foot
     fzf
 

@@ -68,6 +68,13 @@
   # Flakes replace channels for this machine.
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # Automatic store GC so the disk doesn't fill up with old generations again.
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+
   # Escape hatch for packages not yet in the stable channel: refer to them as
   # `unstable.<name>` anywhere pkgs is in scope. The nixpkgs-unstable input is
   # passed in from flake.nix and pinned in flake.lock.
