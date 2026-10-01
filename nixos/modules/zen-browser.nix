@@ -74,13 +74,19 @@ let
       mkdir -p $out/opt/zen $out/bin
       cp -r ./* $out/opt/zen/
 
+      # MOZ_LEGACY_PROFILES: Firefox keys the default profile on the install path,
+      # which changes every rebuild (new store path) -> fresh empty profile.
+      # This makes it always use the Default=1 profile in profiles.ini instead.
       makeWrapper $out/opt/zen/zen $out/bin/zen \
         "''${gappsWrapperArgs[@]}" \
         --set MOZ_ENABLE_WAYLAND 1 \
+        --set MOZ_LEGACY_PROFILES 1 \
+        --set MOZ_ALLOW_DOWNGRADE 1 \
         --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath [
           pkgs.libGL
           pkgs.libpulseaudio  # audio playback — Firefox/cubeb dlopens libpulse.so.0 at runtime
           pkgs.pipewire       # WebRTC / screenshare audio
+          pkgs.ffmpeg         # H.264/AAC (X.com, most MP4 embeds) — bundled libmozavcodec lacks AAC
         ]}"
 
       install -Dm644 $out/opt/zen/browser/chrome/icons/default/default128.png \

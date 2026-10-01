@@ -28,11 +28,16 @@ cleanup() { hyprctl keyword monitor "${INTERNAL}, preferred, auto, auto" >/dev/n
 trap cleanup EXIT
 trap 'cleanup; exit 0' INT TERM
 
-state=""
 while :; do
+    mons=$(hyprctl monitors all -j 2>/dev/null)
     # first connected monitor that is neither the laptop nor a headless fallback
-    ext=$(hyprctl monitors all -j 2>/dev/null | jq -r --arg i "$INTERNAL" '
-        [ .[] | select(.name != $i and (.name | startswith("HEADLESS") | not)) ][0].name // empty')
+    ext=$(jq -r --arg i "$INTERNAL" '
+        [ .[] | select(.name != $i and (.name | startswith("HEADLESS") | not)) ][0].name // empty' <<<"$mons")
+    # read the panel's real state each tick: `hyprctl reload` re-applies
+    # `monitor=,preferred,...` and re-enables it behind our back, so a cached
+    # state would leave workspaces stranded on the closed panel
+    state=$(jq -r --arg i "$INTERNAL" '
+        [ .[] | select(.name == $i) ][0] | if . == null then "" elif .disabled then "off" else "on" end' <<<"$mons")
 
     if [ -n "$ext" ]; then
         want="off"      # external present -> laptop disabled
@@ -46,7 +51,6 @@ while :; do
         else
             hyprctl keyword monitor "${INTERNAL}, preferred, auto, auto" >/dev/null 2>&1
         fi
-        state="$want"
     fi
     sleep 2
 done

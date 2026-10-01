@@ -84,6 +84,9 @@
     #
     librewolf
     brave
+    # Vivaldi: only Chromium-based browser that can auto-hide tabs + address bar (reveal on hover).
+    # Codecs for H.264/AAC (X.com etc.), Widevine for Netflix/Spotify.
+    (vivaldi.override { proprietaryCodecs = true; enableWidevine = true; })
 
     #
     # VPN / Communication
