@@ -6,7 +6,7 @@
 
     "modules-left":   ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["custom/media", "clock"],
-    "modules-right":  ["tray", "pulseaudio", "backlight", "network", "battery"],
+    "modules-right":  ["tray", "hyprland/language", "pulseaudio", "backlight", "network", "battery"],
 
     "hyprland/workspaces": {
         "on-click": "activate",
@@ -17,6 +17,11 @@
     "hyprland/window": {
         "max-length": 60,
         "separate-outputs": true
+    },
+
+    "hyprland/language": {
+        "format": "{short} {variant}",
+        "on-click": "~/.config/hypr/scripts/kb-layout.sh"
     },
 
     "clock": {
