@@ -63,6 +63,7 @@
     pavucontrol     # audio mixer GUI
     cliphist        # clipboard history
     wtype           # cliphist paste helper
+    unstable.voxtype # offline push-to-talk dictation (thumb button); Wispr Flow has no Linux client
     swappy          # screenshot annotate/edit
     grimblast       # convenient screenshot wrapper
     wf-recorder     # region/screen video recording (Super+Shift+R toggle)
