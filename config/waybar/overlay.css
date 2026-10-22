@@ -1,0 +1,34 @@
+* {
+    font-family: "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 0;
+}
+
+window#waybar {
+    background: transparent;
+    color: #e8e8e8;
+}
+
+.modules-left {
+    background: transparent;
+    padding: 0 4px;
+}
+
+#cpu,
+#memory,
+#custom-swap,
+#temperature {
+    background: rgba(12, 12, 12, 0.78);
+    color: #e8e8e8;
+    padding: 0 8px;
+    margin: 2px 3px;
+    border-radius: 4px;
+}
+
+#cpu.critical,
+#memory.critical,
+#custom-swap.critical,
+#temperature.critical {
+    color: #f38ba8;
+}

@@ -34,7 +34,7 @@
   networking.networkmanager.enable = true;
 
   # Timezone
-  time.timeZone = "Australia/Brisbane";
+  time.timeZone = "Australia/Sydney";
 
   # Locale
   i18n.defaultLocale = "en_AU.UTF-8";

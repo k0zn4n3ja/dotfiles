@@ -133,12 +133,15 @@
     transmission_4-gtk
     vlc
     masterpdfeditor
+    xournalpp       # PDF annotate/sign; "Export as PDF" bakes the signature into the page
+    qpdf            # flatten annotations: qpdf --flatten-annotations=all in.pdf out.pdf
 
     #
     # Development
     #
     neovim
     vscodium
+    zed-editor      # lightweight editor with markdown preview
     git
     gh
     gnumake
@@ -177,6 +180,8 @@
     # OmniSharp chokes on (e.g. .NET 10 + Microsoft.Testing.Platform).
     roslyn-ls
     (with dotnetCorePackages; combinePackages [ sdk_8_0 sdk_9_0 sdk_10_0 ])
+    # Java LSP (Eclipse JDT.LS): provides the `jdtls` binary the Claude Code jdtls-lsp plugin runs
+    jdt-language-server
     # Rust LSP (rust-analyzer) + cargo/rustc already installed above
 
     #

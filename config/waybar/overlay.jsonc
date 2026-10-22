@@ -1,0 +1,41 @@
+{
+  "layer": "overlay",
+  "mode": "overlay",
+  "passthrough": true,
+  "exclusive": false,
+  "position": "top",
+  "height": 22,
+  "spacing": 0,
+  "modules-left": ["cpu", "memory", "custom/swap", "temperature"],
+
+  "cpu": {
+    "interval": 1,
+    "format": "cpu {usage}%",
+    "states": { "critical": 80 },
+    "tooltip": false
+  },
+
+  "memory": {
+    "interval": 1,
+    "format": "ram {percentage}%",
+    "states": { "critical": 80 },
+    "tooltip": false
+  },
+
+  "custom/swap": {
+    "exec": "~/.config/waybar/scripts/swap.sh",
+    "return-type": "json",
+    "interval": 1,
+    "format": "{}",
+    "tooltip": false
+  },
+
+  "temperature": {
+    "interval": 1,
+    "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+    "input-filename": "temp1_input",
+    "critical-threshold": 90,
+    "format": "{temperatureC}°C",
+    "tooltip": false
+  }
+}

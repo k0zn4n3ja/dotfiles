@@ -48,6 +48,10 @@ in
     powerOnBoot = true;
   };
 
+  # HFP call control for a paired phone. WirePlumber must be up first so
+  # oFono, not PipeWire, owns the Hands-Free profile.
+  services.ofono.enable = true;
+
   # Printing
   services.printing.enable = true;
 
