@@ -5,7 +5,7 @@
 # and imports topic modules from ./modules/. Each module is the same
 # { config, pkgs, ... }: { ... } shape; NixOS merges them all together.
 
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config, pkgs, nixpkgs-unstable, iamb, ... }:
 
 {
   imports = [
@@ -84,6 +84,7 @@
         inherit (prev.stdenv.hostPlatform) system;
         config.allowUnfree = true;
       };
+      iamb = iamb.packages.${prev.stdenv.hostPlatform.system}.default;
     })
   ];
 

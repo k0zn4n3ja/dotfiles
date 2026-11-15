@@ -9,3 +9,6 @@ fish_add_path -g "/home/nixdt1/.kimi-code/bin"
 # Datadog pup org shortcuts
 alias ap2pup='pup --org au'
 alias uk2pup='pup --org uk'
+
+# Hermes Agent command
+fish_add_path "$HOME/.local/bin"
