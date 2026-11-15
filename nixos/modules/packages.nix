@@ -92,7 +92,7 @@
     #
     # VPN / Communication
     #
-    unstable.protonvpn-gui # stable (4.12) lags and the app nags that it is out of date
+    unstable.proton-vpn # stable (4.12) lags and the app nags that it is out of date
     unstable.proton-vpn-cli # not in 25.11 yet
     thunderbird
     protonmail-bridge
